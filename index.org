@@ -1,0 +1,90 @@
+
+#+begin_src python :session *py* :exports code :results nil
+import pandas as pd
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :session *py* :exports both :results output
+url = "https://www.pjm.com/-/media/markets-ops/ftr/annual-ftr-auction/2023-2024/2023-2024-annual-auction-round-4-results.ashx"
+ftr_data = pd.read_excel(url, sheet_name=0)
+ftr_data
+#+end_src
+
+#+RESULTS:
+
+
+
+#+begin_src python :session *py* :exports both :results value
+option_data = ftr_data[ftr_data["Option MCP"].notna()]
+option_data = option_data[option_data["Hedge Type"]=="Option"]
+option_data
+#+end_src
+
+#+RESULTS:
+#+begin_example
+           FTRID    Class Type Period Type Participant          Source Node  ...  Trade Type Hedge Type  Cleared MW Obligation MCP Option MCP
+13     341960175  DailyOffPeak         All      JANTR2  09GRNVIL13.8 KV GT1  ...         Buy     Option         1.0        -335.22    1333.20
+14     341847538        OnPeak         All      PERAST  09GRNVIL13.8 KV GT1  ...         Buy     Option         5.0       -4427.50    1282.32
+15     341847537  DailyOffPeak         All      PERAST  09GRNVIL13.8 KV GT1  ...         Buy     Option         6.9       -1298.76     654.27
+16     341571239        OnPeak         All      SENECA  09GRNVIL13.8 KV GT1  ...         Buy     Option         3.2       -3223.60    1448.26
+17     341575993        OnPeak         All      SENECA  09GRNVIL13.8 KV GT1  ...         Buy     Option         0.7       -3223.60    1448.26
+...          ...           ...         ...         ...                  ...  ...         ...        ...         ...            ...        ...
+91484  341962003  DailyOffPeak         All      JANTR2               ZION 1  ...         Buy     Option        10.6         145.12     512.43
+91488  341962009        OnPeak         All      JANTR2               ZION 1  ...         Buy     Option         1.2         439.55    1244.75
+91491  341962013        OnPeak         All      JANTR2               ZION 1  ...         Buy     Option         2.0         149.98     599.70
+91493  341289284  DailyOffPeak         All      FLGSTF               ZION 1  ...         Buy     Option        22.8          29.74     281.06
+91495  341962012  DailyOffPeak         All      JANTR2               ZION 1  ...         Buy     Option         2.1          29.74     281.06
+
+[8423 rows x 13 columns]
+#+end_example
+
+
+
+#+begin_src python :session *py* :exports both :results value
+lmp_data = pd.read_excel(url, sheet_name=2)
+lmp_data
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                          Node       PNODEID Period Type       LMP     LMP.1     LMP.2         LMP.3           LMP.4
+0                          NaN           NaN         NaN       24H   On Peak  Off Peak  Wknd On Peak  Daily Off Peak
+1          02ANGOLA138 KV  TR1  9.335348e+07         All  20979.14  13195.47   7783.68       4036.81         3746.87
+2          02ARMCO 138 KV  TR1  9.836998e+07         All  27496.85  18313.72   9183.13       4786.46         4396.67
+3          02BRUSH 138 KV  TR1  9.335349e+07         All  20551.75  13746.13   6805.61       3700.67         3104.94
+4          02BRWELL138 KV  TR1  9.836999e+07         All  22479.32  14627.34   7851.99       4097.78         3754.21
+...                        ...           ...         ...       ...       ...       ...           ...             ...
+6843      ZIONSVIE115 KV  1B12  4.949800e+04         All  31699.24  22796.02   8903.21       5440.89         3462.32
+6844     ZOAR    69 KV   LOAD1  2.156113e+09         All  43265.41     28655  14610.42        9220.1         5390.32
+6845  ZOLLICOF69 KV   ZOLLICOF  2.156110e+09         All   29062.8  18649.04  10413.75       5124.57         5289.18
+6846        ZUBER   138 KV  T1  3.241312e+07         All   30790.8   21769.7    9021.1       4618.73         4402.37
+6847    ZULAJCT 69 KV   LD_185  1.123175e+09         All  29970.58  19024.83  10945.75       5298.33         5647.42
+
+[6848 rows x 8 columns]
+#+end_example
+
+
+"Option price paths" What is this data?
+#+begin_src python :session *py* :exports both :results value
+option_path_data = pd.read_excel(url, sheet_name=3)
+option_path_data
+#+end_src
+
+#+RESULTS:
+#+begin_example
+               Unnamed: 0 Unnamed: 1   Unnamed: 2 Unnamed: 3         All       All.1       All.2         All.3           All.4
+0             Source Node     Source    Sink Node       Sink  Option MCP  Option MCP  Option MCP    Option MCP      Option MCP
+1                     NaN    PNODEID          NaN    PNODEID         24H     On Peak    Off Peak  Wknd On Peak  Daily Off Peak
+2     09GRNVIL13.8 KV GT1   40243881         AECO      51291     20974.9    12459.59     8515.32       3924.94         4590.38
+3     09GRNVIL13.8 KV GT1   40243881          AEP    8445784     4720.39     2572.58     2147.81        814.61          1333.2
+4     09GRNVIL13.8 KV GT1   40243881  AEP GEN HUB   34497125     2335.15     1282.32     1052.84        398.57          654.27
+...                   ...        ...          ...        ...         ...         ...         ...           ...             ...
+5015               ZION 1   33138769   NAPERVILLE   56783061     1967.64     1244.75      722.88        300.15          422.73
+5016               ZION 1   33138769     ROCHELLE   33092305     2707.27     1556.82     1150.45         430.1          720.35
+5017               ZION 1   33138769   ROCK FALLS   33092307     5128.99     2893.15     2235.84        805.36         1430.48
+5018               ZION 1   33138769  ST. CHARLES   33092299     2277.89     1548.02      729.88        255.17          474.71
+5019               ZION 1   33138769     WINNETKA   33092309     1044.68       599.7      444.99        163.93          281.06
+
+[5020 rows x 9 columns]
+#+end_example
