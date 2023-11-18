@@ -35,9 +35,9 @@ $dB_{source,t} = r_f + \sigma_{source} \rho Z_1 + \sigma_{source} \sqrt{1-\rho^2
 |----------------------------+----------+--------+--------------------|
 | Forward Electricity Prices | E        |      2 | Simulated          |
 | Volatility                 | $\sigma$ |      2 | Uniform(0.01, 1)   |
-| Correlation                | $\rho$   |      1 |                    |
+| Correlation                | $\rho$   |      1 | Uniform(-0.5, 0.5) |
 | Mean reversion             | $\kappa$ |      2 | Uniform(0.01, .8)  |
-| Maturity                   | $T$      |      1 |                    |
+| Maturity                   | $T$      |      1 | 1 year             |
 | risk-free                  | $r_f$    |      1 | Uniform(0.01, 0.1) |
 |----------------------------+----------+--------+--------------------|
 
